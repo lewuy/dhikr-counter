@@ -51,7 +51,7 @@
       border-radius: 0.75rem;
       cursor: pointer;
       background: var(--btn-main-bg, #7dd3fc); /* Babyblau */
-      color: var(--btn-main-text, #000);
+      color: var(--btn-main-text, #fff);
       transition: background 0.3s, transform 0.2s;
     }
     .btn-main:hover { background: var(--btn-main-hover, #38bdf8); transform: scale(1.05); }
@@ -64,7 +64,7 @@
       border-radius: 0.5rem;
       cursor: pointer;
       background: var(--btn-secondary-bg, #7dd3fc); /* Babyblau */
-      color: var(--btn-secondary-text, #000);
+      color: var(--btn-secondary-text, #fff);
       transition: background 0.3s, transform 0.2s;
     }
     button.secondary:hover { background: var(--btn-secondary-hover, #38bdf8); transform: scale(1.05); }
@@ -79,11 +79,12 @@
       --card-bg: rgba(44,44,44,0.85);
       --btn-main-bg: #38bdf8;
       --btn-main-hover: #0ea5e9;
-      --btn-main-text: #1e1e1e;
+      --btn-main-text: #000;
       --btn-secondary-bg: #38bdf8;
       --btn-secondary-hover: #0ea5e9;
-      --btn-secondary-text: #1e1e1e;
+      --btn-secondary-text: #000;
       --slider-bg: #7dd3fc;
+      --slider-icon-color: #000;
     }
 
     /* Toggle Switch */
@@ -104,7 +105,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: var(--slider-bg, #7dd3fc); /* Babyblau */
+      background-color: var(--slider-bg, #7dd3fc);
       transition: 0.4s;
       border-radius: 34px;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
@@ -112,12 +113,13 @@
 
     .slider:before {
       position: absolute;
-      content: '\\2600'; /* Sonne */
+      content: '\2600'; /* Sonne */
       height: 26px;
       width: 26px;
       left: 4px;
       bottom: 4px;
       background-color: white;
+      color: var(--slider-icon-color, #000);
       transition: 0.4s;
       border-radius: 50%;
       display: flex;
@@ -129,12 +131,11 @@
 
     input:checked + .slider {
       background-color: var(--slider-bg, #7dd3fc);
-      box-shadow: 0 0 10px rgba(33,150,243,0.5);
     }
 
     input:checked + .slider:before {
       transform: translateX(26px);
-      content: '\\263E'; /* Mond */
+      content: '\263E'; /* Mond */
     }
 
     /* +1 Animation */
@@ -251,13 +252,10 @@
       const plusOne = document.createElement('div');
       plusOne.textContent = '+1';
       plusOne.classList.add('plus-one');
-
-      plusOne.style.color = document.body.classList.contains('dark-mode') ? '#f3f4f6' : '#000';
-
+      plusOne.style.color = document.body.classList.contains('dark-mode') ? '#000' : '#fff';
       document.body.appendChild(plusOne);
       plusOne.style.left = (event.clientX - 10) + 'px';
       plusOne.style.top = (event.clientY - 20) + 'px';
-
       setTimeout(() => plusOne.remove(), 1000);
     }
 
