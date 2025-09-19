@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dhikr Zähler</title>
 
-  <!-- iOS / PWA Meta-Tags -->
   <link rel="apple-touch-icon" href="icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -43,36 +42,37 @@
     h1 { margin-bottom: 1rem; }
     .count { font-size: 4rem; margin: 1rem 0; font-weight: bold; }
 
+    .btn-main, button.secondary {
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+    }
+
     .btn-main {
       margin: 1rem auto;
       padding: 1rem 2rem;
       font-size: 1.5rem;
-      border: none;
-      border-radius: 0.75rem;
-      cursor: pointer;
-      background: var(--btn-main-bg, #7dd3fc); /* Babyblau */
+      background: var(--btn-main-bg, #7dd3fc);
       color: var(--btn-main-text, #fff);
-      transition: background 0.3s, transform 0.2s;
     }
-    .btn-main:hover { background: var(--btn-main-hover, #38bdf8); transform: scale(1.05); }
+    .btn-main:hover { background: var(--btn-main-hover, #38bdf8); }
+    .btn-main:active { transform: scale(0.95); box-shadow: 0 0 15px rgba(61, 182, 255, 0.7); }
 
     button.secondary {
       margin: 0.5rem;
       padding: 0.5rem 1rem;
       font-size: 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      background: var(--btn-secondary-bg, #7dd3fc); /* Babyblau */
+      background: var(--btn-secondary-bg, #7dd3fc);
       color: var(--btn-secondary-text, #fff);
-      transition: background 0.3s, transform 0.2s;
     }
-    button.secondary:hover { background: var(--btn-secondary-hover, #38bdf8); transform: scale(1.05); }
+    button.secondary:hover { background: var(--btn-secondary-hover, #38bdf8); }
+    button.secondary:active { transform: scale(0.95); box-shadow: 0 0 15px rgba(61, 182, 255, 0.7); }
 
     input { padding: 0.5rem; font-size: 1rem; width: 80%; margin-bottom: 1rem; text-align: center; }
     .stats { margin-top: 1rem; font-size: 1rem; }
 
-    /* Dark Mode Styles */
     .dark-mode {
       --bg-color: #1e1e1e;
       --text-color: #f3f4f6;
@@ -87,74 +87,37 @@
       --slider-icon-color: #000;
     }
 
-    /* Toggle Switch */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-      margin-top: 1rem;
-    }
-
-    .switch input { display: none; }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--slider-bg, #7dd3fc);
-      transition: 0.4s;
-      border-radius: 34px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    }
-
-    .slider:before {
-      position: absolute;
-      content: '\2600'; /* Sonne */
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      color: var(--slider-icon-color, #000);
-      transition: 0.4s;
-      border-radius: 50%;
+    .button-row {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      align-items: center;       /* Vertikal mittig */
+      justify-content: center;   /* Horizontal zentriert */
+      gap: 1rem;                 /* Abstand zwischen Button und Schieber */
+      margin-top: 0.5rem;
     }
 
-    input:checked + .slider {
+    .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+    .switch input { display: none; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
       background-color: var(--slider-bg, #7dd3fc);
+      transition: 0.4s; border-radius: 34px; box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
+    .slider:before {
+      position: absolute; content: '\2600'; height: 26px; width: 26px; left: 4px;
+      top: 50%; transform: translateY(-50%);
+      background-color: white; color: var(--slider-icon-color, #000);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: 0.4s;
+    }
+    input:checked + .slider { background-color: var(--slider-bg, #7dd3fc); }
+    input:checked + .slider:before { transform: translateX(26px) translateY(-50%); content: '\263E'; }
 
-    input:checked + .slider:before {
-      transform: translateX(26px);
-      content: '\263E'; /* Mond */
-    }
-
-    /* +1 Animation */
-    .plus-one {
-      position: absolute;
-      font-size: 2rem;
-      font-weight: bold;
-      animation: floatUp 1s ease-out forwards;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-60px) scale(1.5); }
-    }
+    .plus-one { position: absolute; font-size: 2rem; font-weight: bold; animation: floatUp 1s ease-out forwards; pointer-events: none; z-index: 10; }
+    @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.5); } }
   </style>
 </head>
 <body onclick="increment(event)">
+
   <div class="card">
     <h1>Dhikr Zähler</h1>
     <div class="count" id="count">0</div>
@@ -170,7 +133,7 @@
       <p>Gesamt: <span id="total">0</span></p>
     </div>
 
-    <div style="display:flex; align-items:center; gap:1rem; justify-content:center; margin-top:0.5rem;">
+    <div class="button-row">
       <button class="secondary" onclick="reset(); event.stopPropagation();">Reset</button>
       <label class="switch">
         <input type="checkbox" id="modeToggle" onchange="toggleDarkMode()">
