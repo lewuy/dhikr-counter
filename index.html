@@ -13,46 +13,57 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
-      background: #f3f4f6;
+      color: var(--text-color, #000);
+      transition: background 0.5s, color 0.5s;
+      overflow: hidden;
     }
+
+    /* Animierter Hintergrund */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(270deg, #a1c4fd, #c2e9fb, #fbc2eb, #a6c1ee);
+      background-size: 800% 800%;
+      animation: gradientFlow 20s ease infinite;
+    }
+
+    @keyframes gradientFlow {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .dark-mode body::before {
+      background: linear-gradient(270deg, #0f2027, #203a43, #2c5364);
+    }
+
     .card {
-      background: white;
+      background: var(--card-bg, rgba(255,255,255,0.85));
       padding: 2rem;
       border-radius: 1rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       text-align: center;
       width: 300px;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(10px);
     }
-    h1 {
-      margin-bottom: 1rem;
-    }
-    .count {
-      font-size: 3rem;
-      margin: 1rem 0;
-    }
-    button {
-      margin: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      background: #2563eb;
-      color: white;
-    }
-    button:hover {
-      background: #1e40af;
-    }
-    input {
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 80%;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    .stats {
-      margin-top: 1rem;
-      font-size: 1rem;
+
+    h1 { margin-bottom: 1rem; }
+    .count { font-size: 3rem; margin: 1rem 0; }
+    button { margin: 0.5rem; padding: 0.75rem 1.5rem; font-size: 1rem; border: none; border-radius: 0.5rem; cursor: pointer; background: #2563eb; color: white; transition: background 0.3s; }
+    button:hover { background: #1e40af; }
+    input { padding: 0.5rem; font-size: 1rem; width: 80%; margin-bottom: 1rem; text-align: center; }
+    .stats { margin-top: 1rem; font-size: 1rem; }
+
+    .dark-mode {
+      --text-color: #f3f4f6;
+      --card-bg: rgba(44,44,44,0.85);
     }
   </style>
 </head>
@@ -71,36 +82,72 @@
     <div class="stats">
       <p>Gesamt: <span id="total">0</span></p>
     </div>
+
+    <button onclick="toggleDarkMode()">Dark Mode / Light Mode</button>
   </div>
 
+  <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+  <audio id="goalSound" src="https://www.soundjay.com/button/button-3.wav"></audio>
+
   <script>
-    let count = 0;
-    let total = 0;
-    let goal = 0;
+    let count = parseInt(localStorage.getItem('count')) || 0;
+    let total = parseInt(localStorage.getItem('total')) || 0;
+    let goal = parseInt(localStorage.getItem('goal')) || 0;
+    let darkMode = localStorage.getItem('darkMode') === 'true';
+    let goalReached = false;
+
+    const countDisplay = document.getElementById('count');
+    const totalDisplay = document.getElementById('total');
+    const goalStatus = document.getElementById('goalStatus');
+    const clickSound = document.getElementById('clickSound');
+    const goalSound = document.getElementById('goalSound');
+
+    if(darkMode) document.body.classList.add('dark-mode');
 
     function updateDisplay() {
-      document.getElementById('count').textContent = count;
-      document.getElementById('total').textContent = total;
+      countDisplay.textContent = count;
+      totalDisplay.textContent = total;
       if (goal > 0) {
         let rest = Math.max(goal - count, 0);
-        document.getElementById('goalStatus').textContent = `Ziel: ${goal}, noch übrig: ${rest}`;
+        goalStatus.textContent = `Ziel: ${goal}, noch übrig: ${rest}`;
+        if(count >= goal && !goalReached){
+          goalReached = true;
+          goalSound.play();
+          alert('Mashallah! Du hast dein Tagesziel erreicht!');
+        }
+      } else {
+        goalStatus.textContent = 'Kein Ziel gesetzt';
       }
+      localStorage.setItem('count', count);
+      localStorage.setItem('total', total);
+      localStorage.setItem('goal', goal);
     }
 
     function increment() {
       count++;
       total++;
+      clickSound.currentTime = 0;
+      clickSound.play();
       updateDisplay();
     }
 
     function reset() {
       count = 0;
+      goalReached = false;
       updateDisplay();
     }
 
     function setGoal() {
       goal = parseInt(document.getElementById('goalInput').value) || 0;
+      goalReached = false;
       updateDisplay();
+    }
+
+    function toggleDarkMode() {
+      darkMode = !darkMode;
+      if(darkMode) document.body.classList.add('dark-mode');
+      else document.body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', darkMode);
     }
 
     document.addEventListener('keydown', (event) => {
