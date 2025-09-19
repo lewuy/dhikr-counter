@@ -50,11 +50,11 @@
       border: none;
       border-radius: 0.75rem;
       cursor: pointer;
-      background: var(--btn-main-bg, #16a34a);
-      color: var(--btn-main-text, white);
+      background: var(--btn-main-bg, #7dd3fc); /* Babyblau */
+      color: var(--btn-main-text, #000);
       transition: background 0.3s, transform 0.2s;
     }
-    .btn-main:hover { background: var(--btn-main-hover, #15803d); transform: scale(1.05); }
+    .btn-main:hover { background: var(--btn-main-hover, #38bdf8); transform: scale(1.05); }
 
     button.secondary {
       margin: 0.5rem;
@@ -63,11 +63,11 @@
       border: none;
       border-radius: 0.5rem;
       cursor: pointer;
-      background: var(--btn-secondary-bg, #2563eb);
-      color: var(--btn-secondary-text, white);
+      background: var(--btn-secondary-bg, #7dd3fc); /* Babyblau */
+      color: var(--btn-secondary-text, #000);
       transition: background 0.3s, transform 0.2s;
     }
-    button.secondary:hover { background: var(--btn-secondary-hover, #1e40af); transform: scale(1.05); }
+    button.secondary:hover { background: var(--btn-secondary-hover, #38bdf8); transform: scale(1.05); }
 
     input { padding: 0.5rem; font-size: 1rem; width: 80%; margin-bottom: 1rem; text-align: center; }
     .stats { margin-top: 1rem; font-size: 1rem; }
@@ -77,12 +77,13 @@
       --bg-color: #1e1e1e;
       --text-color: #f3f4f6;
       --card-bg: rgba(44,44,44,0.85);
-      --btn-main-bg: #22c55e;
-      --btn-main-hover: #16a34a;
-      --btn-main-text: #f3f4f6;
-      --btn-secondary-bg: #3b82f6;
-      --btn-secondary-hover: #2563eb;
-      --btn-secondary-text: #f3f4f6;
+      --btn-main-bg: #38bdf8;
+      --btn-main-hover: #0ea5e9;
+      --btn-main-text: #1e1e1e;
+      --btn-secondary-bg: #38bdf8;
+      --btn-secondary-hover: #0ea5e9;
+      --btn-secondary-text: #1e1e1e;
+      --slider-bg: #7dd3fc;
     }
 
     /* Toggle Switch */
@@ -103,7 +104,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #ccc;
+      background-color: var(--slider-bg, #7dd3fc); /* Babyblau */
       transition: 0.4s;
       border-radius: 34px;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
@@ -111,7 +112,7 @@
 
     .slider:before {
       position: absolute;
-      content: '\2600'; /* Sonne */
+      content: '\\2600'; /* Sonne */
       height: 26px;
       width: 26px;
       left: 4px;
@@ -127,13 +128,13 @@
     }
 
     input:checked + .slider {
-      background-color: #2196F3;
+      background-color: var(--slider-bg, #7dd3fc);
       box-shadow: 0 0 10px rgba(33,150,243,0.5);
     }
 
     input:checked + .slider:before {
       transform: translateX(26px);
-      content: '\263E'; /* Mond */
+      content: '\\263E'; /* Mond */
     }
 
     /* +1 Animation */
@@ -168,12 +169,13 @@
       <p>Gesamt: <span id="total">0</span></p>
     </div>
 
-    <button class="secondary" onclick="reset(); event.stopPropagation();">Reset</button>
-
-    <label class="switch">
-      <input type="checkbox" id="modeToggle" onchange="toggleDarkMode()">
-      <span class="slider"></span>
-    </label>
+    <div style="display:flex; align-items:center; gap:1rem; justify-content:center; margin-top:0.5rem;">
+      <button class="secondary" onclick="reset(); event.stopPropagation();">Reset</button>
+      <label class="switch">
+        <input type="checkbox" id="modeToggle" onchange="toggleDarkMode()">
+        <span class="slider"></span>
+      </label>
+    </div>
   </div>
 
   <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
@@ -250,14 +252,9 @@
       plusOne.textContent = '+1';
       plusOne.classList.add('plus-one');
 
-      if(document.body.classList.contains('dark-mode')) {
-        plusOne.style.color = '#f3f4f6'; // Weiß im Dark Mode
-      } else {
-        plusOne.style.color = '#000'; // Schwarz im Light Mode
-      }
+      plusOne.style.color = document.body.classList.contains('dark-mode') ? '#f3f4f6' : '#000';
 
       document.body.appendChild(plusOne);
-
       plusOne.style.left = (event.clientX - 10) + 'px';
       plusOne.style.top = (event.clientY - 20) + 'px';
 
