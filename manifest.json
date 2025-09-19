@@ -1,7 +1,7 @@
 {
   "name": "Dhikr Zähler",
   "short_name": "Dhikr",
-  "start_url": "/",
+  "start_url": "/dhikr-counter/",
   "display": "standalone",
   "background_color": "#f3f4f6",
   "theme_color": "#2563eb",
