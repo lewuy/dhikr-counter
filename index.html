@@ -24,23 +24,25 @@
       background-color: var(--bg-color, #f3f4f6);
       color: var(--text-color, #000);
       transition: background 0.5s, color 0.5s;
+      overflow: hidden;
+      position: relative;
     }
 
     .card {
       background: var(--card-bg, rgba(255,255,255,0.85));
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 1rem;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       text-align: center;
-      width: 300px;
-      position: relative;
-      z-index: 1;
+      width: 90%;
+      max-width: 350px;
+      z-index: 2;
       backdrop-filter: blur(10px);
     }
 
     h1 { margin-bottom: 1rem; }
-    .count { font-size: 3rem; margin: 1rem 0; }
-    button { margin: 0.5rem; padding: 0.75rem 1.5rem; font-size: 1rem; border: none; border-radius: 0.5rem; cursor: pointer; background: #2563eb; color: white; transition: background 0.3s, transform 0.2s; }
+    .count { font-size: 4rem; margin: 1rem 0; font-weight: bold; }
+    button { margin: 0.5rem; padding: 0.5rem 1rem; font-size: 1rem; border: none; border-radius: 0.5rem; cursor: pointer; background: #2563eb; color: white; transition: background 0.3s, transform 0.2s; }
     button:hover { background: #1e40af; transform: scale(1.05); }
     input { padding: 0.5rem; font-size: 1rem; width: 80%; margin-bottom: 1rem; text-align: center; }
     .stats { margin-top: 1rem; font-size: 1rem; }
@@ -102,14 +104,28 @@
       transform: translateX(26px);
       content: '\263E'; /* Mond */
     }
+
+    /* +1 Animation */
+    .plus-one {
+      position: absolute;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #16a34a;
+      animation: floatUp 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-60px) scale(1.5); }
+    }
   </style>
 </head>
-<body>
+<body onclick="increment(event)">
   <div class="card">
     <h1>Dhikr Zähler</h1>
     <div class="count" id="count">0</div>
-    <button onclick="increment()">+1</button>
-    <button onclick="reset()">Reset</button>
 
     <div>
       <input type="number" id="goalInput" placeholder="Tagesziel setzen" oninput="setGoal()" />
@@ -119,6 +135,8 @@
     <div class="stats">
       <p>Gesamt: <span id="total">0</span></p>
     </div>
+
+    <button onclick="reset(); event.stopPropagation();">Reset</button>
 
     <label class="switch">
       <input type="checkbox" id="modeToggle" onchange="toggleDarkMode()">
@@ -167,12 +185,13 @@
       localStorage.setItem('goal', goal);
     }
 
-    function increment() {
+    function increment(event) {
       count++;
       total++;
       clickSound.currentTime = 0;
       clickSound.play();
       updateDisplay();
+      showPlusOne(event);
     }
 
     function reset() {
@@ -194,10 +213,23 @@
       localStorage.setItem('darkMode', darkMode);
     }
 
+    function showPlusOne(event) {
+      const plusOne = document.createElement('div');
+      plusOne.textContent = '+1';
+      plusOne.classList.add('plus-one');
+      document.body.appendChild(plusOne);
+
+      // Position am Klickpunkt
+      plusOne.style.left = (event.clientX - 10) + 'px';
+      plusOne.style.top = (event.clientY - 20) + 'px';
+
+      setTimeout(() => plusOne.remove(), 1000);
+    }
+
     document.addEventListener('keydown', (event) => {
       if (event.code === 'Space') {
         event.preventDefault();
-        increment();
+        increment(event);
       }
     });
 
